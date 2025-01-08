@@ -17,8 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from AuthApp.views import RegistrationView
+from AuthApp.views import RegistrationView, CustomLoginView
+from TaskApp.views import home_view, contacts_view, info_view
 
 urlpatterns = [
+    path('', home_view, name='home'),
     path('register/', RegistrationView.as_view(), name='register'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('contacts/', contacts_view, name='contacts'),
+    path('info/', info_view, name='info'),
 ]
