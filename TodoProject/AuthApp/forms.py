@@ -3,7 +3,7 @@ from django import forms
 from AuthApp.models import CustomUser
 
 
-class CustomUserRegistration(forms.ModelForm):
+class CustomUserRegistrationForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(),
         label="Password"
