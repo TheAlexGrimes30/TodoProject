@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView
 
-from AuthApp.forms import CustomUserRegistrationForm
+from AuthApp.forms import CustomUserRegistrationForm, LoginForm
 from AuthApp.models import CustomUser
 from TaskApp.utils import TitleMixin
 
@@ -29,3 +30,31 @@ class RegistrationView(TitleMixin, CreateView):
         messages.error(self.request, "There were errors with registration")
         return super().form_invalid(form)
 
+class CustomLoginView(FormView):
+    template_name = 'login.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('home')
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+    def form_valid(self, form) -> HttpResponseRedirect:
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+
+        try:
+            user = CustomUser.objects.get(username=username)
+
+            if user.check_password(password):
+                login(self.request, user)
+                messages.success(self.request, "You have successfully logged in")
+                return redirect(self.success_url)
+            else:
+                return self.form_invalid(form)
+        except CustomUser.DoesNotExist:
+            return self.form_invalid(form)
+
+class CustomLogoutView(LogoutView):
+    next_page = 'home'
+    def get(self, request, *args, **kwargs):
+        return redirect(self.get_next_page())

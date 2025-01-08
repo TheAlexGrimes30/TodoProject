@@ -2,9 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{% static 'css/auth_styles.css' %}">
 </head>
 <body>
+    <div class="container">
+        <h1>Register</h1>
 
+        <form method="POST" class="form-container">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Register</button>
+        </form>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <p>You have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
 </body>
 </html>

@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'contacts' %}">Contacts</a></li>
+            <li><a href="{% url 'info' %}">About Developer</a></li>
+            <li>
+                <div class="user-info">
+                    {% if user.is_authenticated %}
+                        <p><a href="{% url 'profile' user.id %}">{{ user.username }}</a></p>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </li>
+        </ul>
+    </nav>
+</header>
