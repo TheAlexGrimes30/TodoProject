@@ -52,3 +52,12 @@ class CustomUserRegistration(forms.ModelForm):
             user.save()
         return user
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=128, label="Username")
+    password = forms.CharField(widget=forms.PasswordInput, label="Password")
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not CustomUser.objects.filter(username=username).exists():
+            self.add_error('username', f'User with {username} does not exist')
+        return username
