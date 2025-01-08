@@ -29,6 +29,8 @@ class CustomUser(AbstractBaseUser):
     role = models.CharField(choices=Role, default=Role.USER)
     date_created = models.DateTimeField(auto_now_add=True)
 
+    objects = CustomUserManager()
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 
