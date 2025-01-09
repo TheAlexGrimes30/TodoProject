@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}{{title|default:"Todo Manager"}}{% endblock %}
+
+{% block content %}
+    <h1>{{ task.title }}</h1>
+    <p>Description: {{ task.description }}$</p>
+    <p>Priority: {{ task.priority }} L</p>
+    <p>Deadline: {{ task.deadline }}</p>
+
+    {% if request.user.is_authenticated %}
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'update' slug=task.slug %}" class="btn-primary">Update Task Details</a>
+            <a href="{% url 'delete' slug=task.slug %}" class="btn-primary">Delete Task Details</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

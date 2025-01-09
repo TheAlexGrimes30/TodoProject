@@ -276,3 +276,19 @@ button[type="submit"]:hover {
     color: white;
     transform: translateY(1px);
 }
+
+.btn-primary {
+    background: #32cd32;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #00f2fe;
+    transform: translateY(-3px);
+}
+
+.btn-primary:active {
+    background: #28a745;
+    transform: translateY(1px);
+}

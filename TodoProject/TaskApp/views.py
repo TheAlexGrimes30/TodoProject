@@ -58,7 +58,7 @@ class TaskDetailsView(TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Task, slug=self.kwargs['slug'])
-    
+
 
 
 
