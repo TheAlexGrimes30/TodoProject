@@ -12,7 +12,7 @@ from AuthApp.models import CustomUser
 from TaskApp.utils import TitleMixin
 
 
-class RegistrationView(TitleMixin, CreateView):
+class RegistrationView(CreateView):
     model = CustomUser
     template_name = 'register.html'
     form_class = CustomUserRegistrationForm

@@ -28,31 +28,20 @@ class TaskForm(forms.ModelForm):
             }),
         }
 
-        error_messages = {
-            'title': {
-                'required': _('Title is required.'),
-                'max_length': _('Title length is too long.'),
-            },
-            'description': {
-                'max_length': _('Title length is too long.'),
-            },
-            'priority': {
-                'invalid': _('Choose priority from 1 to 5.'),
-            },
-            'deadline': {
-                'invalid': _('Invalid DateTime format.'),
-            },
-        }
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if len(title) > 128:
+            self.add_error('title', 'Title is too long')
+        return title
 
     def clean_deadline(self):
         deadline = self.cleaned_data.get("deadline")
         if deadline <= timezone.now():
-            return forms.ValidationError(_("Invalid deadline"))
+            self.add_error('deadline', 'Deadline must be equal current date or less')
         return deadline
 
     def clean_priority(self):
         priority = self.cleaned_data.get("priority")
         if priority < 1 or priority > 5:
-            return forms.ValidationError(_("Invalid priority"))
+            self.add_error('priority', 'Priority must be from 1 to 5')
         return priority
-
