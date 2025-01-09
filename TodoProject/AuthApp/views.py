@@ -31,6 +31,7 @@ class RegistrationView(TitleMixin, CreateView):
         messages.error(self.request, "There were errors with registration")
         return super().form_invalid(form)
 
+
 class CustomLoginView(FormView):
     template_name = 'login.html'
     form_class = LoginForm

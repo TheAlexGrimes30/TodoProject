@@ -143,3 +143,20 @@ th, td {
     vertical-align: middle;
     font-size: 1.2rem;
 }
+
+button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: #32cd32;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background: #00f2fe;
+    transform: translateY(-3px);
+}
