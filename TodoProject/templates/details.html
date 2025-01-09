@@ -4,8 +4,8 @@
 
 {% block content %}
     <h1>{{ task.title }}</h1>
-    <p>Description: {{ task.description }}$</p>
-    <p>Priority: {{ task.priority }} L</p>
+    <p>Description: {{ task.description }} </p>
+    <p>Priority: {{ task.priority }} </p>
     <p>Deadline: {{ task.deadline }}</p>
 
     {% if request.user.is_authenticated %}
