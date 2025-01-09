@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 from TaskApp.forms import TaskForm
 from TaskApp.models import Task
@@ -58,6 +58,32 @@ class TaskDetailsView(TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Task, slug=self.kwargs['slug'])
+
+class TaskUpdateView(TitleMixin, UpdateView):
+    title = "Task Update"
+    model = Task
+    form_class = TaskForm
+    template_name = 'update_task.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Task, slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        task = self.get_object()
+        context['task'] = task
+        return context
+
+    def form_valid(self, form):
+        task = form.save(commit=False)
+        task.save()
+        return redirect(reverse_lazy('details', kwargs = {'slug': task.slug}))
+
+    def get_success_url(self):
+        return reverse_lazy('details', kwargs={'slug': self.kwargs['slug']})
+
+
+
 
 
 
