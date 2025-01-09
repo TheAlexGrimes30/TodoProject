@@ -29,8 +29,8 @@
                         <a href="{% url 'details' slug=task.slug %}">
                             <h3>{{ task.title }}</h3>
                         </a>
-                        <p>Priority: {{ task.priority }}$</p>
-                        <p>Deadline: {{ task.deadline }} L</p>
+                        <p>Priority: {{ task.priority }}</p>
+                        <p>Deadline: {{ task.deadline }}</p>
                     </li>
                 {% endfor %}
             </ul>
