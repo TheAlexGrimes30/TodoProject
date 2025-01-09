@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from TaskApp.forms import TaskForm
 from TaskApp.models import Task
@@ -64,6 +64,7 @@ class TaskUpdateView(TitleMixin, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = 'update_task.html'
+    context_object_name = 'task'
 
     def get_object(self, queryset=None):
         return get_object_or_404(Task, slug=self.kwargs['slug'])
@@ -82,9 +83,9 @@ class TaskUpdateView(TitleMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('details', kwargs={'slug': self.kwargs['slug']})
 
-
-
-
-
-
-
+class TaskDeleteView(TitleMixin, DeleteView):
+    title = "Task Delete"
+    model = Task
+    success_url = reverse_lazy('tasks')
+    template_name = 'delete.html'
+    context_object_name = 'task'

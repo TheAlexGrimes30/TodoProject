@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title|default:"Todo Manager" }}{% endblock %}
+
+{% block content %}
+    <h1>Are you sure you want to delete "{{ task.title }}"?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Delete</button>
+        <a href="{% url 'tasks' %}" class="btn-primary">Cancel</a>
+    </form>
+{% endblock %}
