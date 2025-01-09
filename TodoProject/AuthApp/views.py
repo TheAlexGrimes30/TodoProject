@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, DetailView
 
 from AuthApp.forms import CustomUserRegistrationForm, LoginForm
 from AuthApp.models import CustomUser
@@ -58,3 +59,13 @@ class CustomLogoutView(LogoutView):
     next_page = 'home'
     def get(self, request, *args, **kwargs):
         return redirect(self.get_next_page())
+
+class UserProfile(LoginRequiredMixin, TitleMixin, DetailView):
+    model = CustomUser
+    template_name = 'profile.html'
+    title = 'Profile'
+    login_url = '/login/'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(CustomUser, pk=self.kwargs['id'])
+

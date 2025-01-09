@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from AuthApp.views import RegistrationView, CustomLoginView
+from AuthApp.views import RegistrationView, CustomLoginView, UserProfile, CustomLogoutView
 from TaskApp.views import home_view, contacts_view, info_view
 
 urlpatterns = [
@@ -26,4 +26,6 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('contacts/', contacts_view, name='contacts'),
     path('info/', info_view, name='info'),
+    path('profile/<int:id>', UserProfile.as_view(), name='profile'),
+    path('logout/', CustomLogoutView.as_view(), name='logout'),
 ]
