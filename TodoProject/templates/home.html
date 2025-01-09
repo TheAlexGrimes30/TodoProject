@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Task Manager</h1>
 
-    <a href="{% url 'home' %}"><h3>Fridges</h3></a>
+    <a href="{% url 'tasks' %}"><h3>Fridges</h3></a>
 
     {% if user.is_authenticated %}
         {% if request.user.role == 'admin' %}

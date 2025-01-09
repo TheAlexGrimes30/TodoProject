@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 def default_deadline():
@@ -21,7 +22,7 @@ class Task(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = self.slug
+            slug = slugify(self.title)
             count = 1
             while Task.objects.filter(slug=slug).exists():
                 slug = f"{slug}-{count}"

@@ -10,8 +10,8 @@
 
     {% if request.user.is_authenticated %}
         {% if request.user.role == 'admin' %}
-            <a href="{% url 'update' slug=task.slug %}" class="btn-primary">Update Task Details</a>
-            <a href="{% url 'delete' slug=task.slug %}" class="btn-primary">Delete Task Details</a>
+            <a href="{% url 'task_update' slug=task.slug %}" class="btn-primary">Update Task Details</a>
+            <a href="{% url 'task_delete' slug=task.slug %}" class="btn-primary">Delete Task Details</a>
         {% endif %}
     {% endif %}
 

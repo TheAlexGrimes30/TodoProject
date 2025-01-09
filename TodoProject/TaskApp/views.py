@@ -47,7 +47,7 @@ class TaskListView(TitleMixin, TaskContextMixin, FilterMixin, ListView):
 
     def get_queryset(self):
         queryset = Task.objects.all()
-        queryset = queryset.get_filter_task_data(queryset)
+        queryset = self.get_filter_task_data(queryset)
         return queryset
 
 class TaskDetailsView(TitleMixin, DetailView):
