@@ -5,7 +5,7 @@ from django.views.generic import CreateView, ListView
 
 from TaskApp.forms import TaskForm
 from TaskApp.models import Task
-from TaskApp.utils import TitleMixin
+from TaskApp.utils import TitleMixin, FilterMixin, TaskContextMixin
 
 
 def home_view(request) -> HttpResponseRedirect:
@@ -38,10 +38,17 @@ class TaskCreateView(TitleMixin, CreateView):
         form.save()
         return redirect('home')
 
-class TaskListView(TitleMixin, ListView):
+class TaskListView(TitleMixin, TaskContextMixin, FilterMixin, ListView):
     title = "Tasks"
     model = Task
     template_name = 'list_task.html'
+    context_object_name = 'tasks'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Task.objects.all()
+        queryset = queryset.get_filter_task_data(queryset)
+        return queryset
 
 
 
