@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 from TaskApp.forms import TaskForm
 from TaskApp.models import Task
@@ -37,4 +37,11 @@ class TaskCreateView(TitleMixin, CreateView):
     def form_valid(self, form):
         form.save()
         return redirect('home')
+
+class TaskListView(TitleMixin, ListView):
+    title = "Tasks"
+    model = Task
+    template_name = 'list_task.html'
+
+
 
