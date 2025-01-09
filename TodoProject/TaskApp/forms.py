@@ -11,11 +11,9 @@ class TaskForm(forms.ModelForm):
         fields = ['title', 'description', 'priority', 'deadline']
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': 'form-control',
                 'placeholder': 'Enter the title',
             }),
             'description': forms.Textarea(attrs={
-                'class': 'form-control',
                 'placeholder': 'Enter the description',
                 'rows': 4,
             }),
@@ -23,7 +21,6 @@ class TaskForm(forms.ModelForm):
                 'class': 'form-select',
             }),
             'deadline': forms.DateTimeInput(attrs={
-                'class': 'form-control',
                 'type': 'datetime-local',
             }),
         }

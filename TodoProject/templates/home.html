@@ -9,7 +9,7 @@
 
     {% if user.is_authenticated %}
         {% if request.user.role == 'admin' %}
-            <a href="{% url 'home' %}"><h3>Add Task</h3></a>
+            <a href="{% url 'task_create' %}"><h3>Add Task</h3></a>
         {% endif %}
     {% endif %}
 {% endblock %}

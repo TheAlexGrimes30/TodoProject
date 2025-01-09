@@ -179,3 +179,14 @@ button[type="submit"]:hover {
     margin-top: 5px;
     font-weight: bold;
 }
+
+.create-input {
+    margin-bottom: 20px;
+}
+
+.create-input label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}

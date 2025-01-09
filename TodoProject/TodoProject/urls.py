@@ -19,7 +19,7 @@ from django.urls import path
 
 from AuthApp.views import RegistrationView, CustomLoginView, UserProfile, CustomLogoutView, UserProfileUpdateView, \
     UserProfileDeleteView
-from TaskApp.views import home_view, contacts_view, info_view
+from TaskApp.views import home_view, contacts_view, info_view, TaskCreateView
 
 urlpatterns = [
     path('', home_view, name='home'),
@@ -31,4 +31,5 @@ urlpatterns = [
     path('logout/', CustomLogoutView.as_view(), name='logout'),
     path('profile/<int:id>/update-profile', UserProfileUpdateView.as_view(), name='profile_update'),
     path('profile/<int:id>/delete-profile', UserProfileDeleteView.as_view(), name='profile_delete'),
+    path('create-task/', TaskCreateView.as_view(), name='task_create'),
 ]
