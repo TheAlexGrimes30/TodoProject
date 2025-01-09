@@ -87,5 +87,5 @@ class TaskDeleteView(TitleMixin, DeleteView):
     title = "Task Delete"
     model = Task
     success_url = reverse_lazy('tasks')
-    template_name = 'delete.html'
+    template_name = 'delete_task.html'
     context_object_name = 'task'
