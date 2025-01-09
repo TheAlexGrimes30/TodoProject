@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{{title|default:"Todo Manager"}}{% endblock %}
+
+{% block content %}
+    <h1>Tasks</h1>
+    <form method="get" class="form-container">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value="{{ filters.title }}">
+
+        <label for="priority">Priority</label>
+        <input
+            type="number"
+            id="priority"
+            name="priority"
+            value="{{ filters.priority }}"
+            min="1"
+            max="5"
+        >
+
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <div class="tasks-list">
+        {% if tasks %}
+            <ul>
+                {% for fridge in tasks %}
+                    <li>
+                        <a href="{% url 'details' slug=task.slug %}">
+                            <h3>{{ task.title }}</h3>
+                        </a>
+                        <p>Priority: {{ task.priority }}$</p>
+                        <p>Deadline: {{ task.deadline }} L</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Tasks not found.</p>
+        {% endif %}
+    </div>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1&{{ query_params }}">« first</a>
+            <a href="?page={{ page_obj.previous_page_number }}&{{ query_params }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&{{ query_params }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&{{ query_params }}">last »</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

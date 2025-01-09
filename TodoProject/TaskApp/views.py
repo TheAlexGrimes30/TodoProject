@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 
 from TaskApp.forms import TaskForm
 from TaskApp.models import Task
@@ -41,7 +41,7 @@ class TaskCreateView(TitleMixin, CreateView):
 class TaskListView(TitleMixin, TaskContextMixin, FilterMixin, ListView):
     title = "Tasks"
     model = Task
-    template_name = 'list_task.html'
+    template_name = 'tasks.html'
     context_object_name = 'tasks'
     paginate_by = 10
 
@@ -49,6 +49,16 @@ class TaskListView(TitleMixin, TaskContextMixin, FilterMixin, ListView):
         queryset = Task.objects.all()
         queryset = queryset.get_filter_task_data(queryset)
         return queryset
+
+class TaskDetailsView(TitleMixin, DetailView):
+    title = "Task Details"
+    model = Task
+    template_name = 'details.html'
+    context_object_name = 'task'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Task, slug=self.kwargs['slug'])
+    
 
 
 
