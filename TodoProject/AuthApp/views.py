@@ -5,9 +5,9 @@ from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView, DetailView
+from django.views.generic import CreateView, FormView, DetailView, DeleteView, UpdateView
 
-from AuthApp.forms import CustomUserRegistrationForm, LoginForm
+from AuthApp.forms import CustomUserRegistrationForm, LoginForm, CustomUpdateForm
 from AuthApp.models import CustomUser
 from TaskApp.utils import TitleMixin
 
@@ -66,7 +66,40 @@ class UserProfile(LoginRequiredMixin, TitleMixin, DetailView):
     template_name = 'profile.html'
     title = 'Profile'
     login_url = '/login/'
+    context_object_name = 'user_data'
 
     def get_object(self, queryset=None):
         return get_object_or_404(CustomUser, pk=self.kwargs['id'])
 
+class UserProfileDeleteView(LoginRequiredMixin, TitleMixin, DeleteView):
+    model = CustomUser
+    template_name = 'profile_delete.html'
+    title = "Profile Delete"
+    login_url = '/login/'
+    success_url = reverse_lazy('home')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+class UserProfileUpdateView(LoginRequiredMixin, TitleMixin, UpdateView):
+    model = CustomUser
+    template_name = 'profile_update.html'
+    title = "Profile Update"
+    login_url = '/login/'
+    redirect_field_name = 'next'
+    form_class = CustomUpdateForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(CustomUser, pk=self.kwargs['id'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.get_object()
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('profile', id=self.object.id)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))

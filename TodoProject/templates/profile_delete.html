@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title|default:"Delete Profile" }}{% endblock %}
+
+{% block content %}
+    <h1>Are you sure you want to delete your profile?</h1>
+    <p>This action cannot be undone. All your data will be permanently deleted.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Delete</button>
+        <a href="{% url 'profile' id=user.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

@@ -61,3 +61,48 @@ class LoginForm(forms.Form):
         if not CustomUser.objects.filter(username=username).exists():
             self.add_error('username', f'User with {username} does not exist')
         return username
+
+class CustomUpdateForm(forms.ModelForm):
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(),
+        label = "Old Password",
+        required=True
+    )
+
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(),
+        label="New Password",
+        required=True
+    )
+
+    new_password_confirmed = forms.CharField(
+        widget=forms.PasswordInput(),
+        label="Confirm New Password",
+        required=True
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ['old_password', 'new_password', 'new_password_confirmed']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        old_password = cleaned_data.get('old_password')
+        new_password = cleaned_data.get('new_password')
+        new_password_confirmed = cleaned_data.get('new_password_confirmed')
+
+        if not self.instance.check_password(old_password):
+            self.add_error('old_password', 'Old Password is not correct')
+
+        if new_password != new_password_confirmed:
+            self.add_error('new_password_confirmed', 'New password do not match')
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if self.cleaned_data.get('new_password'):
+            user.set_password(self.cleaned_data['new_password'])
+
+        if commit:
+            user.save()
+        return user

@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}{{ title|default:"User Profile" }}{% endblock %}
+
+{% block content %}
+    <h1 style="text-align: center; margin-bottom: 20px;">Profile</h1>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+        <p style="font-size: 16px;"><strong>Username:</strong> {{ user_data.username }}</p>
+        <p style="font-size: 16px;"><strong>Email:</strong> {{ user_data.email }}</p>
+        <p style="font-size: 16px;"><strong>Role:</strong> {{ user_data.get_role_display }}</p>
+
+        <form method="post" action="{% url 'profile_update' id=user_data.id %}" style="margin-bottom: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 16px;">Update Password</button>
+        </form>
+
+        <form method="post" action="{% url 'profile_delete' id=user_data.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" style="width: 100%; padding: 10px; font-size: 16px;">Delete Profile</button>
+        </form>
+    </div>
+{% endblock %}
