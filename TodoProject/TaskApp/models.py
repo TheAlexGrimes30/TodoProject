@@ -5,6 +5,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 
+from AuthApp.models import CustomUser
+from unidecode import unidecode
+
 
 def default_deadline():
     return timezone.now() + timedelta(days=1)
@@ -16,13 +19,14 @@ class Task(models.Model):
     deadline = models.DateTimeField(default=default_deadline)
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="tasks", default=1)
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = slugify(self.title)
+            slug = slugify(unidecode(self.title))
             count = 1
             while Task.objects.filter(slug=slug).exists():
                 slug = f"{slug}-{count}"

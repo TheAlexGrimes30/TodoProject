@@ -9,6 +9,7 @@ from TaskApp.forms import TaskForm
 from TaskApp.models import Task
 from TaskApp.utils import TitleMixin, FilterMixin, TaskContextMixin
 
+@login_required(login_url="/login/")
 def home_view(request) -> HttpResponseRedirect:
     context = {
         'title': 'Home',
@@ -30,7 +31,7 @@ def info_view(request) -> HttpResponseRedirect:
     }
     return render(request, 'info.html', context=context)
 
-class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, CreateView):
+class TaskCreateView(LoginRequiredMixin, TitleMixin, CreateView):
     title = "Task Create"
     model = Task
     form_class = TaskForm
@@ -39,13 +40,8 @@ class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, Create
     login_url = '/login/'
 
     def form_valid(self, form):
+        form.instance.user = self.request.user
         form.save()
-        return redirect('home')
-
-    def test_func(self):
-        return self.request.user.role == 'admin'
-
-    def handle_no_permission(self):
         return redirect('home')
 
 class TaskListView(LoginRequiredMixin, TitleMixin, TaskContextMixin, FilterMixin, ListView):
@@ -57,7 +53,7 @@ class TaskListView(LoginRequiredMixin, TitleMixin, TaskContextMixin, FilterMixin
     login_url = '/login/'
 
     def get_queryset(self):
-        queryset = Task.objects.all()
+        queryset = Task.objects.filter(user=self.request.user)
         queryset = self.get_filter_task_data(queryset)
         return queryset
 
@@ -69,9 +65,9 @@ class TaskDetailsView(LoginRequiredMixin, TitleMixin, DetailView):
     login_url = '/login/'
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Task, slug=self.kwargs['slug'])
+        return get_object_or_404(Task, slug=self.kwargs['slug'], user=self.request.user)
 
-class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, UpdateView):
+class TaskUpdateView(LoginRequiredMixin, TitleMixin, UpdateView):
     title = "Task Update"
     model = Task
     form_class = TaskForm
@@ -79,14 +75,8 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, Update
     context_object_name = 'task'
     login_url = '/login/'
 
-    def test_func(self):
-        return self.request.user.role == 'admin'
-
-    def handle_no_permission(self):
-        return redirect('home')
-
     def get_object(self, queryset=None):
-        return get_object_or_404(Task, slug=self.kwargs['slug'])
+        return get_object_or_404(Task, slug=self.kwargs['slug'], user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -102,7 +92,7 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, Update
     def get_success_url(self):
         return reverse_lazy('details', kwargs={'slug': self.kwargs['slug']})
 
-class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, DeleteView):
+class TaskDeleteView(LoginRequiredMixin, TitleMixin, DeleteView):
     title = "Task Delete"
     model = Task
     success_url = reverse_lazy('tasks')
@@ -110,8 +100,5 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, Delete
     context_object_name = 'task'
     login_url = '/login/'
 
-    def test_func(self):
-        return self.request.user.role == 'admin'
-
-    def handle_no_permission(self):
-        return redirect('home')
+    def get_object(self, queryset=None):
+        return get_object_or_404(Task, slug=self.kwargs['slug'], user=self.request.user)
