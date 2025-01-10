@@ -20,6 +20,7 @@ class Task(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="tasks", default=1)
+    done = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

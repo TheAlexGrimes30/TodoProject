@@ -31,6 +31,14 @@
                         </a>
                         <p>Priority: {{ task.priority }}</p>
                         <p>Deadline: {{ task.deadline }}</p>
+
+                        {% if task.done %}
+                            <p style="color: green;">Task has completed!</p>
+                        {% endif %}
+
+                        {% if task.deadline and task.deadline <= now %}
+                            <p style="color: red;">Deadline has passed!</p>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>

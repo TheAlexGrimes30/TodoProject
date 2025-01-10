@@ -1,18 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}{{title|default:"Todo Manager"}}{% endblock %}
+{% block title %}{{ title|default:"Task Details" }}{% endblock %}
 
 {% block content %}
     <h1>{{ task.title }}</h1>
-    <p>Description: {{ task.description }} </p>
-    <p>Priority: {{ task.priority }} </p>
+    <p>Description: {{ task.description }}</p>
+    <p>Priority: {{ task.priority }}</p>
     <p>Deadline: {{ task.deadline }}</p>
+    <p>Status: {{ task.done|yesno:"Done,Not Done" }}</p>
 
     {% if request.user.is_authenticated %}
-        {% if request.user.role == 'admin' %}
-            <a href="{% url 'task_update' slug=task.slug %}" class="btn-primary">Update Task Details</a>
-            <a href="{% url 'task_delete' slug=task.slug %}" class="btn-primary">Delete Task Details</a>
-        {% endif %}
+        <form method="post" action="{% url 'details' slug=task.slug %}" style="margin-bottom: 20px;">
+            {% csrf_token %}
+            <button type="submit" class="btn">
+                {% if task.done %}
+                    Mark as Not Done
+                {% else %}
+                    Mark as Done
+                {% endif %}
+            </button>
+        </form>
+        <a href="{% url 'task_update' slug=task.slug %}" class="btn-primary">Update Task Details</a>
+        <a href="{% url 'task_delete' slug=task.slug %}" class="btn-primary">Delete Task</a>
     {% endif %}
-
 {% endblock %}

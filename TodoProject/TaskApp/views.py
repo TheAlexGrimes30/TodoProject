@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from TaskApp.forms import TaskForm
@@ -57,6 +58,11 @@ class TaskListView(LoginRequiredMixin, TitleMixin, TaskContextMixin, FilterMixin
         queryset = self.get_filter_task_data(queryset)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
 class TaskDetailsView(LoginRequiredMixin, TitleMixin, DetailView):
     title = "Task Details"
     model = Task
@@ -66,6 +72,12 @@ class TaskDetailsView(LoginRequiredMixin, TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Task, slug=self.kwargs['slug'], user=self.request.user)
+
+    def post(self, request, *args, **kwargs) -> HttpResponseRedirect:
+        task = self.get_object()
+        task.done = not task.done
+        task.save()
+        return redirect('details', slug=task.slug)
 
 class TaskUpdateView(LoginRequiredMixin, TitleMixin, UpdateView):
     title = "Task Update"

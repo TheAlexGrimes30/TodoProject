@@ -64,19 +64,19 @@ class LoginForm(forms.Form):
 
 class CustomUpdateForm(forms.ModelForm):
     old_password = forms.CharField(
-        widget=forms.PasswordInput(),
+        widget=forms.PasswordInput(attrs={'id': 'id_old_password',}),
         label = "Old Password",
         required=True
     )
 
     new_password = forms.CharField(
-        widget=forms.PasswordInput(),
+        widget=forms.PasswordInput(attrs={'id': 'id_new_password',}),
         label="New Password",
         required=True
     )
 
     new_password_confirmed = forms.CharField(
-        widget=forms.PasswordInput(),
+        widget=forms.PasswordInput(attrs={'id': 'id_new_password_confirmed',}),
         label="Confirm New Password",
         required=True
     )
